@@ -1,0 +1,14 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "3.2.6"
+psycopg2 = "2.9.1"
+
+[dev-packages]
+pylint = "*"
+
+[requires]
+python_version = "3.9"
