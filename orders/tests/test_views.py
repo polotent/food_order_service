@@ -61,7 +61,17 @@ class RestaurantViewTest(TransactionTestCase):
 class MenuViewTest(TransactionTestCase):
     reset_sequences = True
 
-    pass
+    def test_no_menu(self):
+        """
+        If no menu exist, an appropriate message is responsed.
+        """
+        response = self.client.get(reverse('orders:menu'))
+        response_json = response.json()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response_json['error'],
+            "Menu not found with requested id"
+        )
 
 
 class OrderViewTest(TransactionTestCase):

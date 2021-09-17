@@ -20,11 +20,14 @@ def restaurants(request):
     return JsonResponse(response)
 
 
-def menu(request, menu_id):
+def menu(request):
     """
     Return JsonResponse with name of menu
     and items for specified restaurant.
     """
+    data = request
+    print(data['asdasd'])
+    menu_id = data['menu_id']
     response = dict()
     try:
         menu_qs = Menu.objects.filter(pk=menu_id).first()

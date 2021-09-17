@@ -10,8 +10,17 @@ class Command(BaseCommand):
     help = 'Seed database with test data'
 
     def clear_data(self):
+        self.clear_restaurant_data()
+        self.clear_menu_data()
+        self.clear_item_data()
+
+    def clear_restaurant_data(self):
         Restaurant.objects.all().delete()
+
+    def clear_menu_data(self):
         Menu.objects.all().delete()
+
+    def clear_item_data(self):
         Item.objects.all().delete()
 
     def handle(self, *args, **options):
