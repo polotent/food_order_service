@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.db import DatabaseError
 from .models import Item, Restaurant, Menu
+from django.views.decorators.csrf import csrf_exempt
 import logging
 
 
@@ -20,17 +21,15 @@ def restaurants(request):
     return JsonResponse(response)
 
 
+@csrf_exempt
 def menu(request):
     """
     Return JsonResponse with name of menu
     and items for specified restaurant.
     """
-    data = request
-    print(data['asdasd'])
-    menu_id = data['menu_id']
     response = dict()
     try:
-        menu_qs = Menu.objects.filter(pk=menu_id).first()
+        menu_qs = Menu.objects.filter(pk=request.POST.get('menu_id')).first()
     except DatabaseError as e:
         response = {'error': 'Error during db transaction'}
         logging.info(f'\"{request.path}\" Error during db transaction: {e}')
