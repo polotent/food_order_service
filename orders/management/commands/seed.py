@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from django.db import connection, transaction, DatabaseError
+from django.db import connection, DatabaseError
 from orders.models import Restaurant, Menu, Item
 from os import path
 
@@ -28,7 +28,7 @@ class Command(BaseCommand):
             self.clear_data()
         except DatabaseError as e:
             raise CommandError(f'Error during db transaction: {e}')
-            
+
         for query in queries:
             if query.strip() != '':
                 try:
