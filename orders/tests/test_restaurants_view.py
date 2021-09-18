@@ -10,7 +10,7 @@ class RestaurantsViewTest(TransactionTestCase):
         """
         If no restaurants exist, an appropriate message is responsed.
         """
-        response = self.client.get(reverse('orders:restaurants'))
+        response = self.client.post(reverse('orders:restaurants'))
         response_json = response.json()
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response_json['restaurants'], [])
@@ -20,7 +20,7 @@ class RestaurantsViewTest(TransactionTestCase):
         List of restaurants is reponsed.
         """
         call_command('seed')
-        response = self.client.get(reverse('orders:restaurants'))
+        response = self.client.post(reverse('orders:restaurants'))
         response_json = response.json()
         self.assertEqual(response.status_code, 200)
         self.assertEqual(

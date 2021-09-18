@@ -12,7 +12,8 @@ class MenuViewTest(TransactionTestCase):
         """
         response = self.client.post(
             reverse('orders:menu'),
-            data={'menu_id': 1}
+            data={'menu_id': 1},
+            content_type='application/json'
         )
         response_json = response.json()
         self.assertEqual(response.status_code, 200)
@@ -28,7 +29,8 @@ class MenuViewTest(TransactionTestCase):
         call_command('seed')
         response = self.client.post(
             reverse('orders:menu'),
-            data={'menu_id': 1}
+            data={'menu_id': 1},
+            content_type='application/json'
         )
         response_json = response.json()
         self.assertEqual(response.status_code, 200)

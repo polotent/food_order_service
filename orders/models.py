@@ -18,11 +18,11 @@ class Restaurant(models.Model):
 
 class Order(models.Model):
     order_date = models.DateTimeField()
-    order_restaurant = models.ForeignKey(
-        Restaurant, on_delete=models.DO_NOTHING
+    order_total_price = models.FloatField(default=0)
+    order_user_addr = models.CharField(max_length=200, null=True, default=None)
+    order_user_phone = models.CharField(
+        max_length=200, null=True, default=None
     )
-    order_user_addr = models.CharField(max_length=200)
-    order_user_phone = models.CharField(max_length=200)
     order_status = models.CharField(max_length=200)
 
 
