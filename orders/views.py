@@ -1,7 +1,6 @@
 from django.http import JsonResponse
 from django.db import DatabaseError
 from .models import Item, Restaurant, Menu
-from django.views.decorators.csrf import csrf_exempt
 import logging
 
 
@@ -21,7 +20,6 @@ def restaurants(request):
     return JsonResponse(response)
 
 
-@csrf_exempt
 def menu(request):
     """
     Return JsonResponse with name of menu
