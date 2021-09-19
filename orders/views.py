@@ -12,12 +12,13 @@ def restaurants(request):
     """
     Return JsonResponse with list of restaurants.
     """
+    response = dict()
+
     if request.method != 'POST':
         response = {'error': 'Request method must be POST'}
         logging.info(f'\"{request.path}\" Sending response: {response}')
         return JsonResponse(response)
 
-    response = dict()
     try:
         response['restaurants'] = list(
             Restaurant.objects.values('restaurant_name', 'menu_id')
@@ -34,6 +35,8 @@ def menu(request):
     Return JsonResponse with name of menu
     and items for specified restaurant.
     """
+    response = dict()
+
     if request.method != 'POST':
         response = {'error': 'Request method must be POST'}
         logging.info(f'\"{request.path}\" Sending response: {response}')
@@ -46,7 +49,6 @@ def menu(request):
         logging.info(f'\"{request.path}\" Sending response: {response}')
         return JsonResponse(response)
 
-    response = dict()
     menu_id = request_data.get('menu_id')
 
     if not menu_id:
@@ -99,6 +101,8 @@ def preorder(request):
     for the order. Return JsonResponse containing
     total price for all menu_items and order id.
     """
+    response = dict()
+
     if request.method != 'POST':
         response = {'error': 'Request method must be POST'}
         logging.info(f'\"{request.path}\" Sending response: {response}')
@@ -111,7 +115,6 @@ def preorder(request):
         logging.info(f'\"{request.path}\" Sending response: {response}')
         return JsonResponse(response)
 
-    response = dict()
     item_list = request_data.get('items')
     if not item_list:
         response = {'error': 'Item list is empty'}
@@ -124,13 +127,13 @@ def preorder(request):
         return JsonResponse(response)
 
     for item in item_list:
-        item_id = item.get('id')
-        item_quantity = item.get('quantity')
-
         if type(item) != dict:
             response = {'error': 'Wrong request format'}
             logging.info(f'\"{request.path}\" Sending response: {response}')
             return JsonResponse(response)
+
+        item_id = item.get('id')
+        item_quantity = item.get('quantity')
 
         if not item_id:
             response = {'error': 'Missing id parameter for item'}
@@ -203,8 +206,73 @@ def preorder(request):
 
 def order(request):
     """
-    Make order to be cooked for specified address
-    and user phone number.
+    Finilize order, specifying address
+    and phone number. This is done
+    after preordering.
     """
     response = dict()
+
+    if request.method != 'POST':
+        response = {'error': 'Request method must be POST'}
+        logging.info(f'\"{request.path}\" Sending response: {response}')
+        return JsonResponse(response)
+
+    try:
+        request_data = json.loads(request.body)
+    except json.decoder.JSONDecodeError:
+        response = {'error': 'Wrong data format'}
+        logging.info(f'\"{request.path}\" Sending response: {response}')
+        return JsonResponse(response)
+
+    order_id = request_data.get('order_id')
+    user_addr = request_data.get('user_addr')
+    user_phone = request_data.get('user_phone')
+
+    if not order_id:
+        response = {'error': 'Missing id parameter for order'}
+        logging.info(f'\"{request.path}\" Sending response: {response}')
+        return JsonResponse(response)
+
+    if type(order_id) != int:
+        response = {'error': 'Order id parameter must be int type'}
+        logging.info(f'\"{request.path}\" Sending response: {response}')
+        return JsonResponse(response)
+
+    if not user_addr:
+        response = {'error': 'Missing user_addr parameter for order'}
+        logging.info(f'\"{request.path}\" Sending response: {response}')
+        return JsonResponse(response)
+
+    if type(user_addr) != str:
+        response = {'error': 'Order user_addr parameter must be int type'}
+        logging.info(f'\"{request.path}\" Sending response: {response}')
+        return JsonResponse(response)
+
+    if not user_phone:
+        response = {'error': 'Missing user_phone parameter for order'}
+        logging.info(f'\"{request.path}\" Sending response: {response}')
+        return JsonResponse(response)
+
+    if type(user_phone) != str:
+        response = {'error': 'Order user_phone parameter must be int type'}
+        logging.info(f'\"{request.path}\" Sending response: {response}')
+        return JsonResponse(response)
+
+    try:
+        order_qs = Order.objects.filter(pk=order_id).first()
+    except DatabaseError as e:
+        response = {'error': 'Error during db transaction'}
+        logging.info(
+            f'\"{request.path}\" Error during db transaction: {e}'
+        )
+        logging.info(f'\"{request.path}\" Sending response: {response}')
+        return JsonResponse(response)
+
+    if not order_qs:
+        response = {'error': 'Order not found with requested id'}
+        logging.info(f'\"{request.path}\" Sending response: {response}')
+        return JsonResponse(response)
+
+    
+
     return JsonResponse(response)
