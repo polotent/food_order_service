@@ -152,11 +152,12 @@ class PreorderViewTest(TransactionTestCase):
             response_json,
             {
                 'order_id': 1,
-                'total_price': 800
+                'total_price': 800,
+                'status': 'registered'
             }
         )
 
-    def test_preorder_with_nonexistent_item_id(self):
+    def test_preorder_with_nonexistent_item(self):
         """
         If item with given id doesn't exist,
         an appropriate message is responsed.

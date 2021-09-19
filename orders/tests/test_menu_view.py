@@ -72,7 +72,7 @@ class MenuViewTest(TransactionTestCase):
             {'error': 'Menu menu_id parameter must be int type'}
         )
 
-    def test_no_menu(self):
+    def test_menu_with_nonexistent_menu(self):
         """
         If no menu exist, an appropriate
         message is responsed.
