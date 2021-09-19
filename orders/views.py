@@ -39,10 +39,21 @@ def menu(request):
         logging.info(f'\"{request.path}\" Sending response: {response}')
         return JsonResponse(response)
 
-    request_data = json.loads(request.body)
+    try:
+        request_data = json.loads(request.body)
+    except json.decoder.JSONDecodeError:
+        response = {'error': 'Wrong data format'}
+        logging.info(f'\"{request.path}\" Sending response: {response}')
+        return JsonResponse(response)
 
     response = dict()
     menu_id = request_data.get('menu_id')
+
+    if not menu_id:
+        response = {'error': 'Missing id parameter for menu'}
+        logging.info(f'\"{request.path}\" Sending response: {response}')
+        return JsonResponse(response)
+
     if type(menu_id) != int:
         response = {'error': 'Menu menu_id parameter must be int type'}
         logging.info(f'\"{request.path}\" Sending response: {response}')
@@ -82,8 +93,6 @@ def menu(request):
     return JsonResponse(response)
 
 
-from django.views.decorators.csrf import csrf_exempt
-@csrf_exempt
 def preorder(request):
     """
     Specify menu_items and their quantity
@@ -95,7 +104,12 @@ def preorder(request):
         logging.info(f'\"{request.path}\" Sending response: {response}')
         return JsonResponse(response)
 
-    request_data = json.loads(request.body)
+    try:
+        request_data = json.loads(request.body)
+    except json.decoder.JSONDecodeError:
+        response = {'error': 'Wrong data format'}
+        logging.info(f'\"{request.path}\" Sending response: {response}')
+        return JsonResponse(response)
 
     response = dict()
     item_list = request_data.get('items')
@@ -128,7 +142,7 @@ def preorder(request):
             logging.info(f'\"{request.path}\" Sending response: {response}')
             return JsonResponse(response)
 
-        if not item_quantity:
+        if not item_quantity and item_quantity != 0:
             response = {'error': 'Missing quantity parameter for item'}
             logging.info(f'\"{request.path}\" Sending response: {response}')
             return JsonResponse(response)
@@ -140,8 +154,7 @@ def preorder(request):
 
         if item_quantity <= 0:
             response = {
-                'error': f'Quantity parameter for item must \
-                    be positive, {item_quantity} was given'
+                'error': f'Item quantity parameter must be positive, {item_quantity} was given'
             }
             logging.info(f'\"{request.path}\" Sending response: {response}')
             return JsonResponse(response)
