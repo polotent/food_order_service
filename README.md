@@ -1,6 +1,8 @@
 # Food order service
 ## Description
 REST server prototype for application for ordering food from restaurants. Made in Python 3 using Django 3.2 framework.
+
+Currently there is only development prototype with hardcoded settings. In production all needed settings would be moved to environment variables.
 ## Requirements
 * PostgreSQL
 * Python 3
@@ -18,8 +20,6 @@ pipenv install
 ```
 ## Usage
 ### Configuration
-Currently there is only development prototype with hardcoded settings. In production all needed settings would be moved to environment variables.
-
 Create 'delivery_food' database in PostreSQL. Create 'django' user with 'django' password and provide rights operate with database.
 
 ### Launching
@@ -36,9 +36,12 @@ Run django server:
 python manage.py runserver
 ```
 
+All logs are saved to 
+
+food_order_service\orders\logs\ordersapp.log
+
 ### Tests
 Run tests with:
 ```
 python manage.py test
 ```
-
