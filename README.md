@@ -20,7 +20,7 @@ pipenv install
 ```
 ## Usage
 ### Configuration
-Create "delivery_food" database in PostreSQL. Create "django" user with "django" password and provide rights operate with database.
+Create "delivery_food" database in PostreSQL. Create "django" user with "django" password and provide rights to operate with database.
 
 ### Launching
 Migrate with:
